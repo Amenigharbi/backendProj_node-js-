@@ -1,6 +1,5 @@
 const express=require('express');
-const {getCategories}=require("../services/categoryService");
+const {getCategories,createCateg}=require("../services/categoryService");
 const router=express.Router();
-router.post('/',getCategories);
-
+router.route('/').get(getCategories).post(createCateg);
 module.exports=router;

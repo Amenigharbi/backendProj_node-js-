@@ -15,8 +15,7 @@ if(process.env.NODE_ENV==='development')
     console.log(`mode: ${process.env.NODE_ENV}`)
 }
 
-//mount routes
-app.use("/api/v1/categories",categoryRoute);
+
 const port=process.env.port||8000;
 
 app.listen(port,()=>{
