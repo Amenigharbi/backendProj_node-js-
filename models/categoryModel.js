@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 //create schema 
-const category=new mongoose.Schema({
+const categorySchema=new mongoose.Schema({
     name:{
         type:String,
         required:[true,'category required'],
@@ -17,5 +17,5 @@ const category=new mongoose.Schema({
 },{timestamps:true})
 
 //create model
-const categoryModel=mongoose.model("category",category);
+const categoryModel=mongoose.model('Category',categorySchema);
 module.exports=categoryModel;
