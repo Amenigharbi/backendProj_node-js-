@@ -6,6 +6,7 @@ dotenv.config({path:"config.env"});
 const ApiError=require("./utils/apiError");
 const dbconn=require("./config/database");
 const categoryRoute=require('./routes/categRoute');
+const SubCategoryRoute=require('./routes/subCategRoute');
 const globalError=require('./middlewares/errorMiddleware');
 dbconn();
 const app=express();
@@ -18,7 +19,7 @@ if(process.env.NODE_ENV==='development')
 }
 
 app.use('/categories', categoryRoute);
-
+app.use('/Subcategories', SubCategoryRoute);
 app.all("*",(req,res,next)=>{
  next(new ApiError(`can't find this route:${req.originalUrl}`,400))
 })

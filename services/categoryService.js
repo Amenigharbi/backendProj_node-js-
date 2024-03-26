@@ -30,7 +30,7 @@ exports.getCategById = asyncHandler(async (req, res,next) => {
 //@route POST /
 //@access private
 exports.createCateg = asyncHandler(async (req, res) => {
-  const name = req.body.name;
+  const {name} = req.body;
   //async await
   const category = await categoryModel.create({ name, slug: slugify(name) });
   res.status(201).json({ data: category });
