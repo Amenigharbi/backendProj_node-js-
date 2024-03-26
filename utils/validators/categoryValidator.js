@@ -5,4 +5,20 @@ exports.getCategoryValidator=[
     validatorMiddleware,
 ];
 
-exports.createCategoryValidator=[];
+exports.createCategoryValidator=[
+    check("name").notEmpty().withMessage("category required")
+    .isLength({min:3}).withMessage("too short category name")
+    .isLength({max:32}).withMessage("too long category name"),
+    validatorMiddleware,
+];
+
+
+exports.UpdateCategoryValidator=[
+    check('id').isMongoId().withMessage("invalid category id format "),
+    validatorMiddleware,
+];
+
+exports.deleteCategoryValidator=[
+    check('id').isMongoId().withMessage("invalid category id format "),
+    validatorMiddleware,
+];
