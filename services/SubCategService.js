@@ -15,12 +15,12 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || 3;
     const skip = (page - 1) * limit;
-    const categories = await SubcategoryModel.find({}).skip(skip).limit(limit);
+    const categories = await SubcategoryModel.find({}).skip(skip).limit(limit).populate({path:"category",select:"name -_id"});
     res.status(200).json({ results: categories.length, page, data: categories });
   });
   
   //@desc Get specific Subcategory by id
-  //@route GET /:id
+  //@route GET subcategories/:id
   //@access public
   exports.getSubCategById = asyncHandler(async (req, res,next) => {
     const { id } = req.params;
@@ -35,10 +35,10 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
 
   exports.updateSubCateg = asyncHandler(async (req, res,next) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name ,category} = req.body;
     const subcateg = await SubcategoryModel.findOneAndUpdate(
       { _id: id },
-      { name, slug: slugify(name) },
+      { name, slug: slugify(name),category },
       { new: true }
     );
   
@@ -49,7 +49,7 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
   });
   
   //@desc delete specific subcategory
-  //@route DELETE /:id
+  //@route DELETE subcategories/:id
   //@access PRIVATE
   exports.deleteSubCateg = asyncHandler(async (req, res,next ) => {
     const { id } = req.params;
