@@ -48,13 +48,13 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
     res.status(200).json({ data: subcateg });
   });
   
+
   //@desc delete specific subcategory
   //@route DELETE subcategories/:id
   //@access PRIVATE
   exports.deleteSubCateg = asyncHandler(async (req, res,next ) => {
     const { id } = req.params;
     const subcateg = await SubcategoryModel.findOneAndDelete(id);
-  
     if (!subcateg) {
       return next(new ApiError( `no category for this id ${id}` ,404));
     }
