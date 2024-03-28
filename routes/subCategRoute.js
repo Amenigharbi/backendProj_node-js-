@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+
 const {createSubCategoryValidator,UpdateSubCategoryValidator,deleteSubCategoryValidator,getSubCategoryValidator}=require("../utils/validators/SubcategoryValidator")
 const {
   createSubCateg,
@@ -7,12 +7,18 @@ const {
   getSubCategories,
   updateSubCateg,
   deleteSubCateg,
+  setCategoryIdToBody,
+  createFilterObj,
+
 } = require("../services/SubCategService");
 
+//mergeParams allow us to access paramaters on other routers 
+//ex: we need to access categoryid from category router 
+const router = express.Router({mergeParams: true});
 router
  .route("/")
- .post(createSubCategoryValidator,createSubCateg)
- .get(getSubCategories);
+ .post(setCategoryIdToBody,createSubCategoryValidator,createSubCateg)
+ .get(createFilterObj,getSubCategories);
 router
  .route("/:id")
  .get(getSubCategoryValidator,getSubCategById)
