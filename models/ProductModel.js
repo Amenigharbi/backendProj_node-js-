@@ -29,7 +29,7 @@ const productSchema=new mongoose.Schema({
     type:Number,
     required:[true,'product price is required'],
     trim:true,
-    maxLength:[20,'too short product price'],
+    max:[200000,'too short product price'],
    },
    priceAfterDiscount:{
     type:Number,
