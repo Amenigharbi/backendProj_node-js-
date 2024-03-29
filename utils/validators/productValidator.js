@@ -67,7 +67,7 @@ exports.createProductValidator = [
       })
     ),
 
-  check('subcategories')
+  check('subCategories')
     .optional()
     .isMongoId()
     .withMessage('Invalid ID formate')
