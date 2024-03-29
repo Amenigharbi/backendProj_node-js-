@@ -7,10 +7,29 @@ const ApiError=require('../utils/apiError');
 //@route GET /
 //@access public
 exports.getProducts = asyncHandler(async (req, res) => {
+  //filtering
+  const queryStringObj={... req.query};
+  const excludesFields=["page","sort","limit","fields"];
+  excludesFields.forEach(field=>delete queryStringObj[field]);
+
+  //apply filteration using [gte|gt|lte|lt]
+  let queryStr=JSON.stringify(queryStringObj);
+  queryStr=queryStr.replace(/\b(gte|gt|lte|lt)\b/g,(match)=>`$${match}`);
+  
+  //pagination
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 3;
+  const limit = req.query.limit * 1 || 50;
   const skip = (page - 1) * limit;
-  const products = await ProductModel.find({}).skip(skip).limit(limit).populate({path:"category",select:"name -_id"});
+
+
+  //build query 
+  const mongooseQuery=ProductModel.find(JSON.parse(queryStr))
+  .skip(skip)
+  .limit(limit)
+  .populate({path:"category",select:"name -_id"});
+  
+  //execute query
+  const products=await mongooseQuery;
   res.status(200).json({ results: products.length, page, data: products });
 });
 
