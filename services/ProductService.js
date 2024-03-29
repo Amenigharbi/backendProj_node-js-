@@ -2,35 +2,18 @@ const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
 const ProductModel = require("../models/ProductModel");
 const ApiError=require('../utils/apiError');
-
+const ApiFeatures=require('../utils/apiFeatures');
 //@desc get list of products
 //@route GET /
 //@access public
 exports.getProducts = asyncHandler(async (req, res) => {
-  //filtering
-  const queryStringObj={... req.query};
-  const excludesFields=["page","sort","limit","fields"];
-  excludesFields.forEach(field=>delete queryStringObj[field]);
-
-  //apply filteration using [gte|gt|lte|lt]
-  let queryStr=JSON.stringify(queryStringObj);
-  queryStr=queryStr.replace(/\b(gte|gt|lte|lt)\b/g,(match)=>`$${match}`);
-  
-  //pagination
-  const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 50;
-  const skip = (page - 1) * limit;
-
-
-  //build query 
-  const mongooseQuery=ProductModel.find(JSON.parse(queryStr))
-  .skip(skip)
-  .limit(limit)
-  .populate({path:"category",select:"name -_id"});
-  
+   //build query 
+  const documentsCounts=await ProductModel.countDocuments();
+  const apiFeatures=new ApiFeatures(ProductModel.find(),req.query).pagination(documentsCounts).filter().search().limitFields().sort();
   //execute query
+  const{mongooseQuery,paginationResult}=apiFeatures;
   const products=await mongooseQuery;
-  res.status(200).json({ results: products.length, page, data: products });
+  res.status(200).json({ results: products.length, paginationResult,data: products });
 });
 
 //@desc Get specific product by id
