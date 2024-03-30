@@ -3,13 +3,15 @@ const asyncHandler = require("express-async-handler");
 const ProductModel = require("../models/ProductModel");
 const ApiError=require('../utils/apiError');
 const ApiFeatures=require('../utils/apiFeatures');
+const factory=require('./handlersFactory');
+
 //@desc get list of products
 //@route GET /
 //@access public
 exports.getProducts = asyncHandler(async (req, res) => {
    //build query 
   const documentsCounts=await ProductModel.countDocuments();
-  const apiFeatures=new ApiFeatures(ProductModel.find(),req.query).pagination(documentsCounts).filter().search().limitFields().sort();
+  const apiFeatures=new ApiFeatures(ProductModel.find(),req.query).pagination(documentsCounts).filter().search("Products").limitFields().sort();
   //execute query
   const{mongooseQuery,paginationResult}=apiFeatures;
   const products=await mongooseQuery;
@@ -60,12 +62,4 @@ exports.updateProd= asyncHandler(async (req, res,next) => {
 //@desc delete specific product
 //@route DELETE /:id
 //@access PRIVATE
-exports.deleteProd = asyncHandler(async (req, res,next ) => {
-  const { id } = req.params;
-  const prod= await ProductModel.findOneAndDelete(id);
-
-  if (!prod) {
-    return next(new ApiError( `no product for this id ${id}` ,404));
-  }
-  res.status(204).send();
-});
+exports.deleteProd =factory.deleteOne(ProductModel);

@@ -39,20 +39,28 @@ class ApiFeatures{
         return this;
     }
 
-    search()
-    {
-        if(this.queryString.keyword){
-            let query={};
-            query.$or=[
-               //i miniscule=majuscule
-              {title:{ $regex:this.queryString.keyword,$options:"i"}},
-              {description:{$regex:this.queryString.keyword,$options:"i"}},
-            ];
-            this.mongooseQuery=this.mongooseQuery.find(query);
-       
-         }
-         return this;
-    }
+    search(modelName) {
+      try {
+          if (this.queryString.keyword) {
+              let query = {};
+              if (modelName == 'Products') {
+                  query.$or = [
+                      { title: { $regex: this.queryString.keyword, $options: "i" } },
+                      { description: { $regex: this.queryString.keyword, $options: "i" } },
+                  ];
+              } else {
+                  query = { name: { $regex: this.queryString.keyword, $options: "i" } };
+              }
+              console.log('Query:', query); 
+              this.mongooseQuery = this.mongooseQuery.find(query);
+          }
+          return this;
+      } catch (error) {
+          console.error('Error in search function:', error); // Imprimez les erreurs s'il y en a
+          throw error; 
+      }
+  }
+  
 
     pagination(countDocuments)
     {
