@@ -49,21 +49,7 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
   });
   
 
-  exports.updateSubCateg = asyncHandler(async (req, res,next) => {
-    const { id } = req.params;
-    const { name ,category} = req.body;
-    const subcateg = await SubcategoryModel.findOneAndUpdate(
-      { _id: id },
-      { name, slug: slugify(name),category },
-      { new: true }
-    );
-  
-    if (!subcateg) {
-      return next(new ApiError( `no category for this id ${id}` ,404));
-    }
-    res.status(200).json({ data: subcateg });
-  });
-  
+  exports.updateSubCateg = factory.updateOne(SubcategoryModel);
 
   //@desc delete specific subcategory
   //@route DELETE subcategories/:id

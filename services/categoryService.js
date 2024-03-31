@@ -42,20 +42,8 @@ exports.createCateg = asyncHandler(async (req, res) => {
 //@desc update specific category
 //@route PUT /:id
 //@access PRIVATE
-exports.updateCateg = asyncHandler(async (req, res,next) => {
-  const { id } = req.params;
-  const { name } = req.body;
-  const categ = await categoryModel.findOneAndUpdate(
-    { _id: id },
-    { name, slug: slugify(name) },
-    { new: true }
-  );
+exports.updateCateg= factory.updateOne(categoryModel);
 
-  if (!categ) {
-    return next(new ApiError( `no category for this id ${id}` ,404));
-  }
-  res.status(200).json({ data: categ });
-});
 
 //@desc delete specific category
 //@route DELETE /:id
