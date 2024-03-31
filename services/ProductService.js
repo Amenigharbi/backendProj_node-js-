@@ -33,11 +33,7 @@ exports.getProdById = asyncHandler(async (req, res,next) => {
 //@desc create product
 //@route POST /
 //@access private
-exports.createProduct= asyncHandler(async (req, res) => {
-  req.body.slug=slugify(req.body.title);
-  const product = await ProductModel.create(req.body);
-  res.status(201).json({data: product});
-});
+exports.createProduct= factory.createOne(ProductModel);
 
 //@desc update specific product
 //@route PUT /:id

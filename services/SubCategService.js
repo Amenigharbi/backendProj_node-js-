@@ -10,12 +10,7 @@ exports.setCategoryIdToBody =(req,res,next)=>{
     next();
 };
 
-exports.createSubCateg = asyncHandler(async (req, res) => {
-  const {name,category} = req.body;
-  //async await
-  const Subcategory = await SubcategoryModel.create({ name, slug: slugify(name),category });
-  res.status(201).json({ data: Subcategory });
-});
+exports.createSubCateg = factory.createOne(SubcategoryModel);
 
 //nested route 
 //Get categories/:categoryId/subcategories

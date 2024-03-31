@@ -32,13 +32,7 @@ exports.getBrandById = asyncHandler(async (req, res,next) => {
 //@desc create brand
 //@route POST /
 //@access private
-exports.createBrand = asyncHandler(async (req, res) => {
-  const {name} = req.body;
-  //async await
-  const brand = await BrandModel.create({ name, slug: slugify(name) });
-  res.status(201).json({ data: brand });
-});
-
+exports.createBrand = factory.createOne(BrandModel);
 
 //@desc update specific brand
 //@route PUT /:id

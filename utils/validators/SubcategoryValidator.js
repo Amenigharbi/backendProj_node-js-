@@ -9,9 +9,14 @@ exports.getSubCategoryValidator=[
 exports.createSubCategoryValidator=[
     check("name").notEmpty().withMessage("Subcategory required")
     .isLength({min:2}).withMessage("too short Subcategory name")
-    .isLength({max:32}).withMessage("too long Subcategory name"),
+    .isLength({max:32}).withMessage("too long Subcategory name")
+    .custom((val,{req})=>{
+        req.body.slug=slugify(val);
+        return true;
+    }),
     check('category').notEmpty().withMessage("subcategory must belong to category")
     .isMongoId().withMessage('invalid category id format'),
+    
     validatorMiddleware,
 ];
 
